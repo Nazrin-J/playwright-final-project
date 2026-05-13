@@ -1,0 +1,95 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: productphone.spec.js >> User adding product under phones
+- Location: tests\productphone.spec.js:5:5
+
+# Error details
+
+```
+Error: locator.waitFor: Target page, context or browser has been closed
+Call log:
+  - waiting for locator('#cartur') to be visible
+
+```
+
+# Test source
+
+```ts
+  1  | export class Productunderphones{      
+  2  | constructor(page){     
+  3  | this.page=page     
+  4  | this.loginuser=page.locator('#login2')
+  5  | this.username=page.locator('#loginusername')
+  6  | this.password=page.locator('#loginpassword')
+  7  | this.signupbutton=page.locator("//button[@onclick='logIn()']")
+  8  | this.phones=page.locator('.list-group-item',{hasText:'Phones'})
+  9  | this.nokialumia=page.locator('.card-title a',{hasText:'Nokia lumia 1520'})
+  10 | this.addcartbutton = page.locator('.btn.btn-success.btn-lg')
+  11 | this.cartbuttonclick=page.locator('#cartur')
+  12 | this.placeOrder = page.getByRole('button', {name:'Place Order'})
+  13 | }
+  14 | 
+  15 | async loginlink()        
+  16 | {
+  17 |     await this.page.goto('https://www.demoblaze.com/')
+  18 | }
+  19 | 
+  20 | async loginbutton()
+  21 | {
+  22 |     await this.loginuser.click()
+  23 | }
+  24 | 
+  25 | async validlogincred(username,password)
+  26 | {
+  27 | 
+  28 | 
+  29 |     await this.username.fill(username)
+  30 |     await this.password.fill(password)
+  31 | }
+  32 | 
+  33 | 
+  34 | async loginconfirm()
+  35 | {
+  36 |     await this.signupbutton.click()
+  37 |     // wait until user logged in
+  38 |     await this.page.locator('#nameofuser').waitFor()
+  39 | 
+  40 | }
+  41 | 
+  42 | async productunderphones()
+  43 | {
+  44 |     await this.phones.click()
+  45 | 
+  46 | } 
+  47 | 
+  48 | async selectphone()
+  49 | {
+  50 |     await this.nokialumia.click()
+  51 | 
+  52 | }
+  53 | async additemcart()
+  54 | {
+  55 |     await this.addcartbutton.click()
+  56 | }
+  57 | 
+  58 | async cart()
+  59 | {
+  60 |     await this.cartbuttonclick.click()
+> 61 |     await this.page.locator('#cartur').waitFor()
+     |                                        ^ Error: locator.waitFor: Target page, context or browser has been closed
+  62 | 
+  63 | }
+  64 | 
+  65 | async placetheorder()
+  66 | {
+  67 |     await this.placeorder.click()
+  68 | }
+  69 | }
+  70 | 
+```

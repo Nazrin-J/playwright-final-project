@@ -1,0 +1,231 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: productphone.spec.js >> User adding product under phones
+- Location: tests\productphone.spec.js:5:5
+
+# Error details
+
+```
+Error: locator.click: Error: strict mode violation: locator('.btn.btn-primary') resolved to 4 elements:
+    1) <button type="button" onclick="send()" class="btn btn-primary">Send message</button> aka getByText('Send message')
+    2) <button type="button" onclick="register()" class="btn btn-primary">Sign up</button> aka locator('button').filter({ hasText: 'Sign up' })
+    3) <button type="button" class="btn btn-primary" onclick="purchaseOrder()">Purchase</button> aka getByRole('button', { name: 'Purchase' })
+    4) <button type="button" onclick="logIn()" class="btn btn-primary">Log in</button> aka locator('button').filter({ hasText: 'Log in' })
+
+Call log:
+  - waiting for locator('.btn.btn-primary')
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - dialog "Place order" [ref=e2]:
+    - document [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - heading "Place order" [level=5] [ref=e6]
+          - button "Close" [ref=e7] [cursor=pointer]: ×
+        - generic [ref=e9]:
+          - generic [ref=e10]: "Total: 820"
+          - generic [ref=e11]:
+            - generic [ref=e12]: "Name:"
+            - 'textbox "Total: 820 Name:" [ref=e13]': test user
+          - generic [ref=e14]:
+            - generic [ref=e15]: "Country:"
+            - textbox "Country:" [ref=e16]: india
+          - generic [ref=e17]:
+            - generic [ref=e18]: "City:"
+            - textbox "City:" [ref=e19]: trivandrum
+          - generic [ref=e20]:
+            - generic [ref=e21]: "Credit card:"
+            - textbox "Credit card:" [ref=e22]: "12345"
+          - generic [ref=e23]:
+            - generic [ref=e24]: "Month:"
+            - textbox "Month:" [ref=e25]: october
+          - generic [ref=e26]:
+            - generic [ref=e27]: "Year:"
+            - textbox "Year:" [active] [ref=e28]: "2006"
+        - generic [ref=e30]:
+          - button "Close" [ref=e31]
+          - button "Purchase" [ref=e32]
+  - text:             
+  - navigation [ref=e33]:
+    - generic [ref=e34]:
+      - link "PRODUCT STORE" [ref=e35] [cursor=pointer]:
+        - /url: index.html
+        - img [ref=e36]
+        - text: PRODUCT STORE
+      - list [ref=e38]:
+        - listitem [ref=e39]:
+          - link "Home (current)" [ref=e40] [cursor=pointer]:
+            - /url: index.html
+            - text: Home
+            - generic [ref=e41]: (current)
+        - listitem [ref=e42]:
+          - link "Contact" [ref=e43] [cursor=pointer]:
+            - /url: "#"
+        - listitem [ref=e44]:
+          - link "About us" [ref=e45] [cursor=pointer]:
+            - /url: "#"
+        - listitem [ref=e46]:
+          - link "Cart" [ref=e47] [cursor=pointer]:
+            - /url: "#"
+        - listitem
+        - listitem [ref=e48]:
+          - link "Log out" [ref=e49] [cursor=pointer]:
+            - /url: "#"
+        - listitem [ref=e50]:
+          - link "Welcome testdemoproj" [ref=e51] [cursor=pointer]:
+            - /url: "#"
+        - listitem
+  - generic [ref=e53]:
+    - generic [ref=e54]:
+      - heading "Products" [level=2] [ref=e55]
+      - table [ref=e57]:
+        - rowgroup [ref=e58]:
+          - row "Pic Title Price x" [ref=e59]:
+            - columnheader "Pic" [ref=e60]
+            - columnheader "Title" [ref=e61]
+            - columnheader "Price" [ref=e62]
+            - columnheader "x" [ref=e63]
+        - rowgroup [ref=e64]:
+          - row "Nokia lumia 1520 820 Delete" [ref=e65]:
+            - cell [ref=e66]:
+              - img [ref=e67]
+            - cell "Nokia lumia 1520" [ref=e68]
+            - cell "820" [ref=e69]
+            - cell "Delete" [ref=e70]:
+              - link "Delete" [ref=e71] [cursor=pointer]:
+                - /url: "#"
+    - generic [ref=e72]:
+      - heading "Total" [level=2] [ref=e73]
+      - heading "820" [level=3] [ref=e76]
+      - button "Place Order" [ref=e77]
+  - generic [ref=e79]:
+    - generic [ref=e82]:
+      - heading "About Us" [level=4] [ref=e83]
+      - paragraph [ref=e84]: We believe performance needs to be validated at every stage of the software development cycle and our open source compatible, massively scalable platform makes that a reality.
+    - generic [ref=e87]:
+      - heading "Get in Touch" [level=4] [ref=e88]
+      - paragraph [ref=e89]: "Address: 2390 El Camino Real"
+      - paragraph [ref=e90]: "Phone: +440 123456"
+      - paragraph [ref=e91]: "Email: demo@blazemeter.com"
+    - heading "PRODUCT STORE" [level=4] [ref=e95]:
+      - img [ref=e96]
+      - text: PRODUCT STORE
+  - contentinfo [ref=e97]:
+    - paragraph [ref=e98]: Copyright © Product Store
+```
+
+# Test source
+
+```ts
+  1  | export class Productunderphones{      
+  2  | constructor(page){     
+  3  | this.page=page     
+  4  | this.loginuser=page.locator('#login2')
+  5  | this.username=page.locator('#loginusername')
+  6  | this.password=page.locator('#loginpassword')
+  7  | this.loginbutn=page.locator("//button[@onclick='logIn()']")
+  8  | this.phones=page.locator('.list-group-item',{hasText:'Phones'})
+  9  | this.nokialumia=page.locator('.card-title a',{hasText:'Nokia lumia 1520'})
+  10 | this.addcartbutton = page.locator('.btn.btn-success.btn-lg')
+  11 | //this.addcartbutton = page.getByRole('button', {name:'Add to cart'})
+  12 | this.cartbuttonclick=page.locator('#cartur')
+  13 | this.placeorder = page.getByRole('button', {name:'Place Order'})
+  14 | //this.placeorder = page.locator('.btn.btn-success')
+  15 | this.name=page.locator('#name')
+  16 | this.country=page.locator('#country')
+  17 | this.city=page.locator('#city')
+  18 | this.creditcard=page.locator('#card')
+  19 | this.month=page.locator('#month')
+  20 | this.year=page.locator('#year')
+  21 | this.purchase=page.locator('.btn.btn-primary')
+  22 | this.okbutton=page.locator('.confirm.btn.btn-lg.btn-primary')
+  23 | 
+  24 | }
+  25 | 
+  26 | async loginlink()        
+  27 | {
+  28 |     await this.page.goto('https://www.demoblaze.com/')
+  29 | }
+  30 | 
+  31 | async loginbutton()
+  32 | {
+  33 |     await this.loginuser.click()
+  34 | }
+  35 | 
+  36 | async validlogincred(username,password)
+  37 | {
+  38 | 
+  39 | 
+  40 |     await this.username.fill(username)
+  41 |     await this.password.fill(password)
+  42 | }
+  43 | 
+  44 | 
+  45 | async loginconfirm()
+  46 | {
+  47 |     await this.loginbutn.click()
+  48 | 
+  49 | }
+  50 | 
+  51 | async productunderphones()
+  52 | {
+  53 |     await this.phones.click()
+  54 | 
+  55 | } 
+  56 | 
+  57 | async selectphone()
+  58 | {
+  59 |     await this.nokialumia.click()
+  60 | 
+  61 | }
+  62 | async additemcart()
+  63 | {
+  64 |     await this.addcartbutton.click()
+  65 | }
+  66 | 
+  67 | async cart()
+  68 | {
+  69 |     await this.cartbuttonclick.click()
+  70 |   
+  71 | 
+  72 | }
+  73 | 
+  74 | async placetheorder()
+  75 | {
+  76 |     await this.placeorder.click()
+  77 | }
+  78 | async details(name,country,city,creditcard,month,year)
+  79 | {
+  80 | 
+  81 | 
+  82 |     await this.name.fill(name)
+  83 |     await this.country.fill(country)
+  84 |     await this.city.fill(city)
+  85 |     await this.creditcard.fill(creditcard)
+  86 |     await this.month.fill(month)
+  87 |     await this.year.fill(year)
+  88 | 
+  89 | }
+  90 | async purchaseitem()
+  91 | {
+> 92 |     await this.purchase.click()
+     |                         ^ Error: locator.click: Error: strict mode violation: locator('.btn.btn-primary') resolved to 4 elements:
+  93 | }
+  94 | async purchaseconfirmation()
+  95 | {
+  96 |     await this.okbutton.click()
+  97 | }
+  98 | }
+  99 | 
+```
