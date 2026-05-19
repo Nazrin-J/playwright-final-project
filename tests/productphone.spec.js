@@ -5,20 +5,31 @@ import {Productunderphones} from '../pages/Product-phones'
 test('User adding product under phones',async({page})=>{
 const addphone=new Productunderphones(page)  //constructor invoking
 await addphone.loginlink()
+await expect(page).toHaveURL('https://www.demoblaze.com/')
 await addphone.loginbutton()
+await expect(page.locator('#login2')).toBeVisible()
+await expect(addphone.username).toBeVisible() //username field should be visible
+await expect(addphone.password).toBeVisible() //password field should be visible
 await addphone.validlogincred('testdemoproj','testdemoproj@123')
+await expect(addphone.username).toHaveValue('testdemoproj')  //to check whether the username fields contains the value or not
+await expect(addphone.password).toHaveValue('testdemoproj@123') //to check whether the password fields contains the value or not
 await addphone.loginconfirm()
+await expect(page).toHaveTitle('STORE')
 await addphone.productunderphones()
 await addphone.selectphone()
+await expect(page).toHaveURL('https://www.demoblaze.com/prod.html?idp_=2')  //to check whether the url is correct or not after clicking phones
 page.on('dialog',async dialog=>{             //listener creation -it listens for any pop up like alerts/popups,this step should create first if any pop up/alert appears-to handle the alerts/popups listeners are created first
 expect(dialog.message()).toBe('Product added.') //dialog.message()-actual text,we're checking the actual alert text with our expected text in toBe.verification-expectation-if any alerts come it will verifies our given message and compare it with our given message and alert message-and checks if both are same
 await dialog.accept()  //to click OK button on an alert we use accept()
 })
 await addphone.additemcart()
 await addphone.cart()
+await expect(page).toHaveURL('https://www.demoblaze.com/cart.html') //to check whether the url is correct or not after clicking add to cart button
 await addphone.placetheorder()
+await expect(addphone.name).toBeVisible()
 await addphone.details('test user','india','trivandrum','12345','october','2006')
+await expect(addphone.country).toHaveValue('india')
 await addphone.purchaseitem()
 await addphone.purchaseconfirmation()
-
+await expect(page).toHaveURL('https://www.demoblaze.com/index.html')//
 })

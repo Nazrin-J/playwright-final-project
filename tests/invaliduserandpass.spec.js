@@ -5,8 +5,14 @@ import{Invalidcredentials}from '../pages/Invaliduserandpass'
 test('User login with invalid username and invalid password',async({page})=>{
 const logininvalidcred=new Invalidcredentials(page)  //constructor invoking
 await logininvalidcred.loginurl()
+await expect(page).toHaveURL('https://www.demoblaze.com/')
 await logininvalidcred.loginbutton()
+await expect(page.locator('#login2')).toBeVisible()
+await expect(logininvalidcred.username).toBeVisible()
+await expect(logininvalidcred.password).toBeVisible()
 await logininvalidcred.invaliduserpass('gdhdhdh','testdemopdhdhdroj@1235474')
+await expect(logininvalidcred.username).toHaveValue('gdhdhdh')
+await expect(logininvalidcred.password).toHaveValue('testdemopdhdhdroj@1235474')
 page.on('dialog',async dialog=>{             //listener creation -it listens for any pop up like alerts/popups,this step should create first if any pop up/alert appears-to handle the alerts/popups listeners are created first
 expect(dialog.message()).toBe('User does not exist.') //dialog.message()-actual text,we're checking the actual alert text with our expected text in toBe.verification-expectation-if any alerts come it will verifies our given message and compare it with our given message and alert message-and checks if both are same
 await dialog.accept()  //to click OK button on an alert we use accept()
